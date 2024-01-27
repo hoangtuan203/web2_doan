@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 define('_DIR_ROOT', __DIR__);
 
 //Xử lý http root
@@ -64,8 +67,6 @@ if (!empty($config['database'])) {
 
     if (!empty($db_config)) {
         require_once 'core/Connection.php';
-        require_once 'core/QueryBuilder.php';
-        require_once 'core/Database.php';
         require_once 'core/DB.php';
     }
 }
@@ -88,8 +89,6 @@ if (!empty($allHelpers)) {
 }
 
 require_once 'core/Model.php'; //Load Base Model
-
-require_once 'core/Template.php'; //Load Template
 
 require_once 'core/Controller.php'; //Load base controller
 

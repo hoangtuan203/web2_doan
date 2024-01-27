@@ -35,11 +35,12 @@ class Controller{
 
         }else{
             if (file_exists(_DIR_ROOT.'/app/views/'.$view.'.php')){
-                $contentView = file_get_contents(_DIR_ROOT.'/app/views/'.$view.'.php');
+                ob_start(); 
+                include _DIR_ROOT.'/app/views/'.$view.'.php';
+                $contentView = ob_get_clean(); // Lấy nội dung đã bắt đầu từ đầu
             }
 
-            $template =  new Template();
-            $template->run($contentView, $data);
+            echo $contentView;
         }
 
     }

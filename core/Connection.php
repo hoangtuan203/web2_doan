@@ -1,31 +1,20 @@
 <?php
-class Connection
-{
-    private static $instance = null, $conn = null;
+class Connection {
+    private static $instance = null;
+    private $conn = null;
 
     private function __construct($config)
     {
-
-        //Kết nối database
+        // Kết nối database
         try {
+            $this->conn = new mysqli($config['host'], $config['user'], $config['pass'], $config['db']);
 
-            //Cấu hình dsn
-            $dsn = 'mysql:dbname=' . $config['db'] . ';host=' . $config['host'];
-
-            //Cấu hình $options
-            /*
-             * - Cấu hình utf8
-             * - Cấu hình ngoại lệ khi truy vấn bị lỗi
-             * */
-            $options = [
-                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            ];
-            //Câu lệnh kết nối
-            $con = new PDO($dsn, $config['user'], $config['pass'], $options);
-
-            self::$conn = $con;
-
+            // Kiểm tra kết nối có thành công không
+            if ($this->conn->connect_error) {
+                $mess = $this->conn->connect_error;
+                App::$app->loadError('database', ['message' => $mess]);
+                die();
+            }
         } catch (Exception $exception) {
             $mess = $exception->getMessage();
             App::$app->loadError('database', ['message' => $mess]);
@@ -37,9 +26,14 @@ class Connection
     {
         if (self::$instance == null) {
             $connection = new Connection($config);
-            self::$instance = self::$conn;
+            self::$instance = $connection->getConnection();
         }
 
         return self::$instance;
+    }
+
+    public function getConnection()
+    {
+        return $this->conn;
     }
 }

@@ -1,21 +1,24 @@
 <?php
-//User Model
-class User extends Model
-{
+class User {
+    private $__conn;
 
-    public function tableFill()
-    {
-        return 'users';
+    function __construct(){
+        global $db_config;
+        $this->__conn = Connection::getInstance($db_config);
     }
 
-    public function fieldFill()
-    {
-        return '*';
+    public function getCourse () {
+        $sql = "SELECT * FROM Course";
+        $result = $this->__conn->query($sql);
+    
+        if ($result) {
+            $data = array();
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return false;
     }
-
-    public function primaryKey()
-    {
-        return 'id';
-    }
-
+    
 }

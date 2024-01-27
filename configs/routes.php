@@ -1,2 +1,2 @@
 <?php
-$routes['default_controller'] = 'homecontroller';
+$routes['default_controller'] = 'home';
